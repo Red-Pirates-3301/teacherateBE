@@ -48,13 +48,6 @@ def validate_number(num):
     return bool(pattern.match(str(num)))
 
 # Create your views here.
-
-
-@api_view(['GET'])
-def get_client_ip(request):
-    client_ip = request.META.get('REMOTE_ADDR')
-    return JsonResponse({'client_ip': client_ip})
-
 @csrf_protect
 @api_view(["POST"])
 def addAccount(request):
@@ -126,13 +119,13 @@ def addRating(request):
     json_document = json_util.dumps(account["rated_teachers"])
     array = json.loads(json_document)
     
-    if teacher_id in array:
-        return HttpResponse("Teacher already rated.")
+#     if teacher_id in array:
+#         return HttpResponse("Teacher already rated.")
     
     if(validate_number(rating) != True):
         return HttpResponse("Rating is invalid")
     
-    print("ACCOUNT", account["rated_teachers"])
+#     print("ACCOUNT", account["rated_teachers"])
     
     try:
         teacher = teacher_db.teachers.find_one({"id": teacher_id})
