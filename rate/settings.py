@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-eri#p#4^*7e+u(^1vh)ar_yv+pun*u$f7t4r91_&0m$e%#f6n!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["teacherate.ml"]
+ALLOWED_HOSTS = ["teacherate.ml", "*"]
 
 # Application definition
 
