@@ -48,6 +48,13 @@ def validate_number(num):
     return bool(pattern.match(str(num)))
 
 # Create your views here.
+
+
+@api_view(['GET'])
+def get_client_ip(request):
+    client_ip = request.META.get('REMOTE_ADDR')
+    return JsonResponse({'client_ip': client_ip})
+
 @csrf_protect
 @api_view(["POST"])
 def addAccount(request):
