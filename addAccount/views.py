@@ -82,12 +82,9 @@ def addAccount(request):
 def retrieve(request):
     ip = request.data.get("ip")
     hashed_ip = hash_ip(ip)
-    userID = request.data.get("userID")
+    # userID = request.data.get("userID")
     
-    account_by_user_id = account_db.accounts.find_one({"userID": userID},{'_id': 0, 'userID': 1, 'rated_teachers': 1})
-    
-    if not account_by_user_id:
-        if validate_ipv4_address(ip):
+    if validate_ipv4_address(ip):
             account_by_ip = account_db.accounts.find_one({"ip": hashed_ip})
             
             if not account_by_ip:    
@@ -97,12 +94,8 @@ def retrieve(request):
                 json_document_ip = json_util.dumps(account_by_ip)
                 return JsonResponse(json_document_ip, safe=False)
             
-        else:
-            return HttpResponse("Invalid IP")
-        
     else:
-        json_document = json_util.dumps(account_by_user_id)
-        return JsonResponse(json_document, safe=False)
+        return HttpResponse("Invalid IP")
     
     
     
