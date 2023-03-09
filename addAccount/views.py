@@ -82,10 +82,13 @@ def addAccount(request):
 def retrieve(request):
     ip = request.data.get("ip")
     hashed_ip = hash_ip(ip)
-    # userID = request.data.get("userID")
+    userID = request.data.get("userID")
     
-    if validate_ipv4_address(ip):
-            account_by_ip = account_db.accounts.find_one({"ip": hashed_ip}, {'_id': 0, 'userID': 1, 'rated_teachers': 1})
+    account_by_user_id = account_db.accounts.find_one({"userID": userID},{'_id': 0, 'userID': 1, 'rated_teachers': 1})
+    
+    if not account_by_user_id:
+        if validate_ipv4_address(ip):
+            account_by_ip = account_db.accounts.find_one({"ip": hashed_ip})
             
             if not account_by_ip:    
                 return JsonResponse({"status":404})
@@ -94,8 +97,12 @@ def retrieve(request):
                 json_document_ip = json_util.dumps(account_by_ip)
                 return JsonResponse(json_document_ip, safe=False)
             
+        else:
+            return HttpResponse("Invalid IP")
+        
     else:
-        return HttpResponse("Invalid IP")
+        json_document = json_util.dumps(account_by_user_id)
+        return JsonResponse(json_document, safe=False)
     
     
     
@@ -112,13 +119,13 @@ def addRating(request):
     json_document = json_util.dumps(account["rated_teachers"])
     array = json.loads(json_document)
     
-#     if teacher_id in array:
-#         return HttpResponse("Teacher already rated.")
+    if teacher_id in array:
+        return HttpResponse("Teacher already rated.")
     
     if(validate_number(rating) != True):
         return HttpResponse("Rating is invalid")
     
-#     print("ACCOUNT", account["rated_teachers"])
+    print("ACCOUNT", account["rated_teachers"])
     
     try:
         teacher = teacher_db.teachers.find_one({"id": teacher_id})
