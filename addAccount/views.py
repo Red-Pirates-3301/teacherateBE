@@ -85,7 +85,7 @@ def retrieve(request):
     # userID = request.data.get("userID")
     
     if validate_ipv4_address(ip):
-            account_by_ip = account_db.accounts.find_one({"ip": hashed_ip, {'_id': 0, 'userID': 1, 'rated_teachers': 1})
+            account_by_ip = account_db.accounts.find_one({"ip": hashed_ip, {'_id': 0, 'userID': 1, 'rated_teachers': 1}})
             
             if not account_by_ip:    
                 return JsonResponse({"status":404})
